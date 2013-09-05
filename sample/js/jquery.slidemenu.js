@@ -5,7 +5,7 @@
 		OPEN: 1,
 		IN_PROGRESS: 2
 	};
-	var smY, sfY, mfY;
+	var smY, sfY, mfY, moveY, startY, draggedY, startTime, diffTime;
 
 
 	function _open() {
@@ -98,34 +98,54 @@
 			$(settings.menu_contents).bind("touchstart.scrollMenu", function() {
 				menu_list_height = $(settings.menu_list).height();
 				sfY = event.touches[0].screenY;
-
+				startTime = (new Date()).getTime();
+				startY = event.changedTouches[0].clientY;
 			});
 
 			//scroll - touchMove
 			$(settings.menu_contents).bind("touchmove.scrollMenu", function() {
 				mfY = event.changedTouches[0].screenY;
-				var moveY = smY + mfY - sfY;
+				moveY = smY + mfY - sfY;
+				draggedY = event.changedTouches[0].clientY - startY;
 
-				if(moveY > 0) moveY = 0;
-				if(screen.height > menu_list_height) {
-					moveY = 0;
-				}
-				else if(screen.height - menu_list_height > moveY + settings.bottom_margin) {
-					moveY = screen.height - menu_list_height - settings.bottom_margin;
-				}
 				$(this).css({
-					'-webkit-transform':'translate3d(0px,'+ moveY +'px,0px)',
+					'-webkit-transition': 'none',
+					'-webkit-transform': 'translate3d(0px,'+ moveY +'px,0px)'
 				});
 			});
 
 			//scroll - touchEnd
 			$(settings.menu_contents).bind("touchend.scrollMenu", function() {
+				diffTime = (new Date()).getTime() - startTime;
 				smY = smY + (mfY - sfY);
-				if(smY > 0) smY = 0;
-				if(screen.height > menu_list_height) {
-					smY = 0;
+
+				if (diffTime < 200 && draggedY > 0) { // scroll up
+					moveY += Math.abs((draggedY / diffTime) * 500);
+					$(settings.menu_contents).css({
+						'-webkit-transition': '-webkit-transform .7s ease-out',
+						'-webkit-transform': 'translate3d(0px,'+ moveY +'px,0px)'
+					});
+					smY = moveY;
+				} else if (diffTime < 200 && draggedY < 0) { // scroll down
+					moveY -= Math.abs((draggedY / diffTime) * 500);
+					$(settings.menu_contents).css({
+						'-webkit-transition': '-webkit-transform .7s ease-out',
+						'-webkit-transform': 'translate3d(0px,'+ moveY +'px,0px)'
+					});
+					smY = moveY;
 				}
-				else if(screen.height - menu_list_height > smY + settings.bottom_margin) {
+
+				if (moveY > 0) {
+					$(settings.menu_contents).css({
+						'-webkit-transition': '-webkit-transform .5s ease-out',
+						'-webkit-transform': 'translate3d(0px,'+ 0 +'px,0px)'
+					});
+					smY = 0;
+				} else if (screen.height - menu_list_height > moveY + settings.bottom_margin) {
+					$(settings.menu_contents).css({
+						'-webkit-transition': '-webkit-transform .5s ease-out',
+						'-webkit-transform': 'translate3d(0px,'+ (screen.height - menu_list_height - settings.bottom_margin) +'px,0px)'
+					});
 					smY = screen.height - menu_list_height - settings.bottom_margin;
 				}
 			});
