@@ -144,12 +144,12 @@
 						'-webkit-transform': 'translate3d(0px,'+ 0 +'px,0px)'
 					});
 					smY = 0;
-				} else if (screen.height - menu_list_height > moveY + settings.bottom_margin) {
+				} else if (window.innerHeight - menu_list_height > moveY + settings.bottom_margin) {
 					$(settings.menu_contents).css({
 						'-webkit-transition': '-webkit-transform .5s ease-out',
-						'-webkit-transform': 'translate3d(0px,'+ (screen.height - menu_list_height - settings.bottom_margin) +'px,0px)'
+						'-webkit-transform': 'translate3d(0px,'+ (window.innerHeight - menu_list_height - settings.bottom_margin) +'px,0px)'
 					});
-					smY = screen.height - menu_list_height - settings.bottom_margin;
+					smY = window.innerHeight - menu_list_height - settings.bottom_margin;
 				}
 			});
 		});
