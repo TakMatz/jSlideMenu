@@ -134,6 +134,9 @@
 					});
 					smY = moveY;
 				}
+				if (isNaN(smY)) {
+						smY = 0;
+				}
 
 				if (moveY > 0) {
 					$(settings.menu_contents).css({
