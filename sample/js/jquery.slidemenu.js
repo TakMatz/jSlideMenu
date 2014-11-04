@@ -145,11 +145,14 @@
 					});
 					smY = 0;
 				} else if (window.innerHeight - menu_list_height > moveY + settings.bottom_margin) {
+					smY = window.innerHeight - menu_list_height - settings.bottom_margin;
+					if ($(window).height() > menu_list_height) {console.log('hoge');
+						smY = 0;
+					}
 					$(settings.menu_contents).css({
 						'-webkit-transition': '-webkit-transform .5s ease-out',
-						'-webkit-transform': 'translate3d(0px,'+ (window.innerHeight - menu_list_height - settings.bottom_margin) +'px,0px)'
+						'-webkit-transform': 'translate3d(0px,'+ smY +'px,0px)'
 					});
-					smY = window.innerHeight - menu_list_height - settings.bottom_margin;
 				}
 			});
 		});
