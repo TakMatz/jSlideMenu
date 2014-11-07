@@ -22,6 +22,7 @@
 	function _close() {
 		status = Status.IN_PROGRESS;
 		$(settings.menu + ", " + settings.main_contents).removeClass('show');
+		$("html, body").css("overflow-x", "initial");
 		$("html").unbind("touchmove.scrollContents");
 		event.preventDefault();
 	};
